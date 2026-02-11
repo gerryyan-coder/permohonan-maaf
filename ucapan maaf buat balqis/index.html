@@ -1,0 +1,156 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>MAAFIN GAK?!</title>
+    <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
+    <style>
+        body {
+            background-color: #121212;
+            color: white;
+            font-family: 'Arial', sans-serif;
+            margin: 0;
+            overflow: hidden;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+        }
+
+        #main-card {
+            background: #1e1e1e;
+            padding: 40px;
+            border-radius: 25px;
+            border: 3px solid #ff4757;
+            text-align: center;
+            z-index: 100;
+            position: relative;
+        }
+
+        h1 { font-size: 24px; color: #ff4757; }
+        p { color: #ccc; }
+
+        .btn-container {
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+            margin-top: 25px;
+        }
+
+        button {
+            padding: 15px;
+            border: none;
+            border-radius: 12px;
+            font-weight: bold;
+            cursor: pointer;
+            font-size: 16px;
+            transition: 0.2s;
+        }
+
+        #btn-maaf { background: #2ed573; color: white; }
+        #btn-ogah { background: #ff4757; color: white; }
+
+        .clone-cat {
+            position: fixed;
+            width: 120px;
+            z-index: 1;
+            pointer-events: none;
+            animation: bounce 1s infinite alternate;
+        }
+
+        @keyframes bounce {
+            from { transform: scale(1); }
+            to { transform: scale(1.1); }
+        }
+
+        #wa-link {
+            display: none;
+            background: #25d366;
+            color: white;
+            text-decoration: none;
+            padding: 15px;
+            border-radius: 10px;
+            font-weight: bold;
+            margin-top: 20px;
+        }
+    </style>
+</head>
+<body>
+
+    <div id="main-card">
+        <img id="cat-header" src="https://media.giphy.com/media/v1.Y2lkPTc5MGI3NjExM3NueXJ6MHg5amtxYnl6Z3B6Zmt4ZzRndmZ6Zmt4ZzRndmZ6Zmt4ZyZlcD12MV9pbnRlcm5hbF9naWZfYnlfaWQmY3Q9cy/MDJ9IbxxvDUQM/giphy.gif" style="width: 100px; margin-bottom: 10px;">
+        <h1>BALQIS, JAWAB JUJUR!</h1>
+        <p id="instruction">Pilih salah satu (gak boleh skip):</p>
+
+        <div class="btn-container" id="btn-group">
+            <button id="btn-maaf" onclick="forgive()">MAAFIN AKU (Aku Sayang Kamu)</button>
+            <button id="btn-ogah" onclick="spawningCat()">GAK! (Aku Masih Marah)</button>
+        </div>
+
+        <a href="https://wa.me/6285773079268?text=Iya%20udah%20dimaafkan%2C%20abis%20ini%20jemput%20aku%20makan%20ya!" id="wa-link">KIRIM PESAN DAMAI KE WA</a>
+    </div>
+
+    <script>
+        let catCount = 0;
+        const instruction = document.getElementById('instruction');
+        const btnOgah = document.getElementById('btn-ogah');
+        const catHeader = document.getElementById('cat-header');
+
+        const catGifs = [
+            "https://media.giphy.com/media/v1.Y2lkPTc5MGI3NjExM3NueXJ6MHg5amtxYnl6Z3B6Zmt4ZzRndmZ6Zmt4ZzRndmZ6Zmt4ZyZlcD12MV9pbnRlcm5hbF9naWZfYnlfaWQmY3Q9cy/MDJ9IbxxvDUQM/giphy.gif",
+            "https://media.giphy.com/media/v1.Y2lkPTc5MGI3NjExM3NueXJ6MHg5amtxYnl6Z3B6Zmt4ZzRndmZ6Zmt4ZzRndmZ6Zmt4ZyZlcD12MV9pbnRlcm5hbF9naWZfYnlfaWQmY3Q9cy/MDJ9IbxxvDUQM/giphy.gif",
+            "https://media.giphy.com/media/v1.Y2lkPTc5MGI3NjExM3NueXJ6MHg5amtxYnl6Z3B6Zmt4ZzRndmZ6Zmt4ZzRndmZ6Zmt4ZyZlcD12MV9pbnRlcm5hbF9naWZfYnlfaWQmY3Q9cy/MDJ9IbxxvDUQM/giphy.gif"
+        ];
+
+        function spawningCat() {
+            catCount++;
+            
+            // Perubahan teks instruksi
+            const texts = ["Yakin?", "Masih marah?", "Kucingnya nambah loh!", "Ayo klik yang hijau!", "Udah penuh layarnya!"];
+            instruction.innerText = texts[catCount % texts.length];
+
+            // Munculkan kucing baru di tempat random
+            const newCat = document.createElement('img');
+            newCat.src = catGifs[catCount % catGifs.length];
+            newCat.className = 'clone-cat';
+            newCat.style.left = Math.random() * (window.innerWidth - 100) + 'px';
+            newCat.style.top = Math.random() * (window.innerHeight - 100) + 'px';
+            document.body.appendChild(newCat);
+
+            // Tombol "Gak" makin susah diklik (lari)
+            const x = Math.random() * (window.innerWidth - 100);
+            const y = Math.random() * (window.innerHeight - 50);
+            btnOgah.style.position = 'fixed';
+            btnOgah.style.left = x + 'px';
+            btnOgah.style.top = y + 'px';
+
+            if(catCount > 10) {
+                btnOgah.innerText = "OKE AKU NYERAH (MAAFIN)";
+                btnOgah.style.background = "#2ed573";
+                btnOgah.onclick = forgive;
+            }
+        }
+
+        function forgive() {
+            // Hapus semua kucing kloning
+            const clones = document.querySelectorAll('.clone-cat');
+            clones.forEach(c => c.remove());
+
+            // Tampilan Sukses
+            document.body.style.backgroundColor = '#ff85a2';
+            document.getElementById('btn-group').style.display = 'none';
+            document.getElementById('wa-link').style.display = 'block';
+            instruction.innerHTML = "<b>KITA DAMAI! 🎉</b><br>Tuh kan, akhirnya Balqis luluh juga sama pasukan kucing!";
+            catHeader.src = "https://media.giphy.com/media/v1.Y2lkPTc5MGI3NjExM3NueXJ6MHg5amtxYnl6Z3B6Zmt4ZzRndmZ6Zmt4ZzRndmZ6Zmt4ZyZlcD12MV9pbnRlcm5hbF9naWZfYnlfaWQmY3Q9cy/MDJ9IbxxvDUQM/giphy.gif";
+
+            // KONFETI BRUTAL
+            let end = Date.now() + (4 * 1000);
+            (function frame() {
+              confetti({ particleCount: 7, spread: 80, origin: { y: 0.6 }, colors: ['#ff4757', '#ffffff', '#2ed573'] });
+              if (Date.now() < end) requestAnimationFrame(frame);
+            }());
+        }
+    </script>
+</body>
+</html>
